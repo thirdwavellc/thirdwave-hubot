@@ -145,3 +145,12 @@ module.exports = (robot) ->
         .get() (err, res, body) ->
           msg.message.user.workingon = undefined
           msg.send "Okay, I stopped the timer for FogBugz #{msg.match[1]}"
+
+    robot.hear /bugz my timer/i, (msg) ->
+      if msg.message.user.workingon
+        msg.send "You're currently working on #{msg.message.user.workingon}"
+      else
+        msg.send "You don't appear to be working on a case."
+
+  else
+    msg.send "My apologies, but it appears that HUBOT_FOGBUGZ_HOST is not set."
