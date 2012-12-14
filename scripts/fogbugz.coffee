@@ -17,6 +17,7 @@
 #   bugz my cases - displays your cases
 #   bugz start <case number> - start timer for the case
 #   bugz stop <case number - stop timer for the case
+#   bugz my timer - displays your current timer (if running)
 #
 # Notes:
 #   
@@ -48,6 +49,7 @@ module.exports = (robot) ->
                 bugz my cases - displays your cases
                 bugz start <case number> - start timer for the case
                 bugz stop <case number - stop timer for the case
+                bugz my timer = displays your current timer (if running)
                """
                
     robot.hear /bugz case (\d+)/i, (msg) ->
@@ -88,78 +90,6 @@ module.exports = (robot) ->
                 msg.send "FogBugz #{bug.ixBug}: #{bug.sTitle}"
             else
               msg.send "FogBugz #{cases.ixBug}: #{cases.sTitle}"
-
-    robot.hear /bugz filters/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listFilters"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz projects/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listProjects"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz areas/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listAreas"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz categories/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listCategories"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz priorities/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listPriorities"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz people/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listPeople"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz statuses/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listStatuses"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz fix fors/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listFixFors"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
-
-    robot.hear /bugz mailboxes/i, (msg) ->
-      msg.http(bugzURL)
-        .query
-          cmd: "listMailboxes"
-          token: msg.message.user.bugzToken
-        .get() (err, res, body) ->
-          msg.send body
 
     robot.hear /bugz register (.*) (.*)/i, (msg) ->
       msg.send "Registering #{msg.message.user.name}..."
@@ -217,3 +147,12 @@ module.exports = (robot) ->
         .get() (err, res, body) ->
           msg.message.user.workingon = undefined
           msg.send "Okay, I stopped the timer for FogBugz #{msg.match[1]}"
+
+    robot.hear /bugz my timer/i, (msg) ->
+      if msg.message.user.workingon
+        msg.send "You're currently working on #{msg.message.user.workingon}"
+      else
+        msg.send "You don't appear to be working on a case."
+
+  else
+    msg.send "My apologies, but it appears that HUBOT_FOGBUGZ_HOST is not set."
