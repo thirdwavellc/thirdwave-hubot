@@ -54,7 +54,7 @@ module.exports = (robot) ->
       msg.http(bugzURL)
         .query
           cmd: "search"
-          token: env.HUBOT_FOGBUGZ_TOKEN
+          token: msg.message.user.bugzToken
           q: msg.match[1]
           cols: "ixBug,sTitle,sStatus,sProject,sArea,sPersonAssignedTo,ixPriority,sPriority,sLatestTextSummary"
         .get() (err, res, body) ->
@@ -76,7 +76,7 @@ module.exports = (robot) ->
       msg.http(bugzURL)
         .query
           cmd: "search"
-          token: env.HUBOT_FOGBUGZ_TOKEN
+          token: msg.message.user.bugzToken
           q: msg.match[1]
           cols: "ixBug,sTitle"
           max: "10"
