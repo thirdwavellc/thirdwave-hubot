@@ -17,6 +17,7 @@
 #   bugz my cases - displays your cases
 #   bugz start <case number> - start timer for the case
 #   bugz stop <case number - stop timer for the case
+#   bugz my timer - displays your current timer (if running)
 #
 # Notes:
 #   
@@ -48,6 +49,7 @@ module.exports = (robot) ->
                 bugz my cases - displays your cases
                 bugz start <case number> - start timer for the case
                 bugz stop <case number - stop timer for the case
+                bugz my timer = displays your current timer (if running)
                """
                
     robot.hear /bugz case (\d+)/i, (msg) ->
